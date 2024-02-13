@@ -1,4 +1,4 @@
-# import accelerate?
+import accelerate
 from transformers import LlamaConfig, LlamaTokenizer, LlamaForCausalLM
 
 
