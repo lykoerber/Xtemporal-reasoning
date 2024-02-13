@@ -15,7 +15,7 @@ tokenizer = LlamaTokenizer.from_pretrained(model_name)
 
 def generate(model, tokenizer, prompt):
     inputs = tokenizer(prompt, return_tensors="pt")
-    inputs.input_ids = inputs.input_ids.to('meta')
+    # inputs.input_ids = inputs.input_ids.to('meta')
     ids = model.generate(inputs.input_ids, max_length=30)
     output = tokenizer.batch_decode(ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
     print(ids, output)
