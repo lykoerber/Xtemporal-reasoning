@@ -27,7 +27,11 @@ logging.info('Tokenizer loaded.')
 def generate(model, tokenizer, prompt):
     inputs = tokenizer.encode(prompt, return_tensors="pt")
     # inputs.input_ids = inputs.input_ids.to('meta')
-    ids = model.generate(inputs, max_length=50, num_return_sequences=3, top_k=50)
+    ids = model.generate(inputs,
+                        max_length=70,
+                        num_return_sequences=3,
+                        top_k=10,
+                        no_repeat_ngram_size=2)
     output = [tokenizer.decode(ids[i], skip_special_tokens=True) for i in range(len(ids))]
     print(ids, output)
     logging.info('Generated.')
@@ -36,9 +40,10 @@ def generate(model, tokenizer, prompt):
 
 if __name__=='__main__':
     logging.basicConfig(filename='log/test.log', format=f'%(levelname)s: %(message)s', level=logging.INFO, filemode='w')
-    prompt = "How long did Cannes Film Festival 2019 last?\n"  # ,12 days,Facts
+    # duration
+    prompt = "Please answer the following question: How long did Cannes Film Festival 2019 last?"  # duration,12 days,Facts
     generate(model, tokenizer, prompt)
-    prompt2 = "Pourquoi tu marches pas en fait?\n"
+    prompt2 = "How often does Christmas occur?"  # frequency, Every 2 years,Once a year,Every 3 years,B,Facts
     generate(model, tokenizer, prompt2)
-    prompt3 = "Hi! How are you?"
+    prompt3 = "Sarah was born. Then Sarah started kindergarten. - True/False?" # ordering, Sarah was born. Then Sarah started kindergarten. - True/False?,TRUE,FALSE,Undetermined,A,Commonsense
     generate(model, tokenizer, prompt3)
