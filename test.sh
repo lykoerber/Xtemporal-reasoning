@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=timellama
-#SBATCH --output=outputs.txt
+#SBATCH --output=outputs/output-test.txt
 #SBATCH --mail-user=koerber@cl.uni-heidelberg.de
 #SBATCH --mail-type=ALL
 #SBATCH --time=00:10:00

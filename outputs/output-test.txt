@@ -1,0 +1,50 @@
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]/home/students/koerber/ep/.venv/lib/python3.8/site-packages/torch/_utils.py:776: UserWarning: TypedStorage is deprecated. It will be removed in the future and UntypedStorage will be the only storage class. This should only matter to you if you are using storages directly.  To access UntypedStorage directly, use tensor.untyped_storage() instead of tensor.storage()
+  return self.fget.__get__(instance, owner)()
+Loading checkpoint shards:  33%|███▎      | 1/3 [00:13<00:27, 13.52s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:25<00:12, 12.76s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:33<00:00, 10.51s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:33<00:00, 11.19s/it]
+/home/students/koerber/ep/.venv/lib/python3.8/site-packages/transformers/generation/utils.py:1413: UserWarning: You are calling .generate() with the `input_ids` being on a device type different than your model's device. `input_ids` is on cpu, whereas the model is on cuda. You may experience unexpected behaviors or slower generation. Please make sure that you have put `input_ids` to the correct device by calling for example input_ids = input_ids.to('cuda') before running `.generate()`.
+  warnings.warn(
+tensor([[    1,  1128,  1472,  1258,   315, 22393,  4643,  8518, 29871, 29906,
+         29900, 29896, 29929,  1833, 29973,    13,     0,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+             0,     0,     0,     0,     0, 29889,     0,     0,     0, 29889],
+        [    1,  1128,  1472,  1258,   315, 22393,  4643,  8518, 29871, 29906,
+         29900, 29896, 29929,  1833, 29973,    13,     0,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,     0,     0,     0, 29889],
+        [    1,  1128,  1472,  1258,   315, 22393,  4643,  8518, 29871, 29906,
+         29900, 29896, 29929,  1833, 29973,    13,     0,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,     0, 29889,     0,     0]]) ['How long did Cannes Film Festival 2019 last?\n..', 'How long did Cannes Film Festival 2019 last?\n.', 'How long did Cannes Film Festival 2019 last?\n.']
+tensor([[    1,  6803,   339,  7768,  5291,  8575,   267,  2331,   427,  5246,
+         29973,    13,     0,     0, 29889,     0,     0,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+             0,     0,     0, 29889,     0,     0,     0, 29889,  4345,     0],
+        [    1,  6803,   339,  7768,  5291,  8575,   267,  2331,   427,  5246,
+         29973,    13,     0,     0,  1671,     0,     0,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+             0,     0,  4345,     0,     0,     0, 29889,     0,  4345,  4345],
+        [    1,  6803,   339,  7768,  5291,  8575,   267,  2331,   427,  5246,
+         29973,    13,     0,     0, 29889,     0,     0,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,     0, 29889,     0,     0]]) ['Pourquoi tu marches pas en fait?\n...MS', 'Pourquoi tu marches pas en fait?\n pourMS.MSMS', 'Pourquoi tu marches pas en fait?\n..']
+tensor([[    1,  6324, 29991,  1128,   526,   366, 29973,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,     0,  4345,     0,     0,
+          4345,  4345,  4345,  4345,  4345,  4345,  4345,  4345,  4345,  4345,
+          4345,  4345,  4345,  4345,  4345,  4345,  4345,  4345,  4345,  4345],
+        [    1,  6324, 29991,  1128,   526,   366, 29973,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+             0,  4345,     0,     0,  4345,  4345,  7228,  4345,  4345,  7228,
+          4345,  7228,  4345,  4345,  4345,  7228,  4345,  7228,  4345,  4345],
+        [    1,  6324, 29991,  1128,   526,   366, 29973,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+             0,     0,     0,     0,     0,     0,  4345,     0,  4345,  4345,
+          4345, 10888,  4345,  4345,  4345,  4345,  4345,  4345,  4345,  4345,
+          4345,  4345,  4345,  4345,  4345,  4345,  4345,  4345,  4345,  4345]]) ['Hi! How are you?MSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMS', 'Hi! How are you?MSMSMSPAMSMSPAMSPAMSMSMSPAMSPAMSMS', 'Hi! How are you?MSMSMSMS MSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMSMS']
