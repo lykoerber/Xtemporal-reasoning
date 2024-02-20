@@ -34,7 +34,7 @@ def generate(model, tokenizer, prompt):
     ids = model.generate(input_ids,
                         max_length=90,
                         num_return_sequences=3,
-                        top_k=10,
+                        # top_k=10,
                         no_repeat_ngram_size=2)
     output = [tokenizer.decode(ids[i], skip_special_tokens=True) for i in range(len(ids))]
     print(ids, output)
