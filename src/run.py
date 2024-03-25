@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import accelerate
 import logging
+import pandas as pd
 from transformers import (
     LlamaConfig,
     LlamaTokenizer,
@@ -9,6 +10,8 @@ from transformers import (
     set_seed
     )
 import torch
+
+from prompting import read_data, few_shot, create_prompt
 
 
 # random seed for reproducibility
@@ -37,7 +40,6 @@ logging.info('Tokenizer loaded.')
 
 def generate(model, tokenizer, prompt):
     input_ids = tokenizer.encode(prompt, return_tensors="pt")
-    # inputs.input_ids = inputs.input_ids.to('meta')
     input_ids = input_ids.to('cuda')
     ids = model.generate(input_ids,
                         max_new_tokens=100,
@@ -49,20 +51,23 @@ def generate(model, tokenizer, prompt):
                         length_penalty=1,
                         no_repeat_ngram_size=2)
     output = [tokenizer.decode(ids[i], skip_special_tokens=True) for i in range(len(ids))]
-    print(ids)
-    print(output)
     logging.info('Generated.')
     return output
 
+def run_dataset(dir, prompting="5-shot", output_file='outputs/ordering_mcq.json'):
+    ds = read_data(dir)
+    outputs = []
+    for d in ds.iterrows():
+        prompt = create_prompt(d, shots=5, shot_dir='data/ordering/ordering_shots_mcq.csv')
+        output = generate(model, tokenizer, prompt)
+        output_wo_prompt = [o.replace(prompt, '') for o in output]
+        outputs.append(output_wo_prompt)
+        if d[0] == 50:
+            break
+    output_df = pd.DataFrame(outputs, columns=[f'g{i}' for i in range(len(outputs[0]))])
+    output_df.to_json(output_file)#, encoding='utf-8')
+
 
 if __name__=='__main__':
-    logging.basicConfig(filename='log/test.log', format=f'%(levelname)s: %(message)s', level=logging.INFO, filemode='w')
-    # duration
-    prompt = "How long did Cannes Film Festival 2019 last?"  # duration,12 days,Facts
-    generate(model, tokenizer, prompt)
-    prompt2 = "How often does Christmas occur? \nChoose from the answers: Every 2 years, once a year, or every 3 years?"  # frequency, Every 2 years,Once a year,Every 3 years,B,Facts
-    generate(model, tokenizer, prompt2)
-    prompt3 = "Sarah was born. Then Sarah started kindergarten. - Is this true or false?" # ordering, Sarah was born. Then Sarah started kindergarten. - True/False?,TRUE,FALSE,Undetermined,A,Commonsense
-    generate(model, tokenizer, prompt3)
-    prompt4 = "Arrange the following events in chronological order: (1) Mike opened a second bakery location. (2) Mike launched his online cake delivery service." # order, (1), (2)",Commonsense"
-    generate(model, tokenizer, prompt4)
+    logging.basicConfig(filename='../log/test.log', format=f'%(levelname)s: %(message)s', level=logging.INFO, filemode='w')
+    run_dataset('data/ordering/ordering_mcq.csv')
