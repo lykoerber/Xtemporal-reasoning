@@ -20,7 +20,7 @@ torch.manual_seed(42)
 torch.cuda.manual_seed_all(42)
 
 # Model names: "chrisyuan45/TimeLlama-7b-chat", "chrisyuan45/TimeLlama-13b-chat"
-model_name = "chrisyuan45/TimeLlama-7b-chat"
+model_name = "chrisyuan45/TimeLlama-7b"
 quantization_config = BitsAndBytesConfig.from_dict({
     'load_in_4bit': True,
     'bnb_4bit_compute_dtype': torch.float16,
@@ -54,15 +54,20 @@ def generate(model, tokenizer, prompt):
     logging.info('Generated.')
     return output
 
-def run_dataset(dir, prompting="5-shot", output_file='outputs/ordering_mcq.json'):
+def run_dataset(dir, shots=5, output_file='outputs/ordering_mcq_5shot.json'):
     ds = read_data(dir)
     outputs = []
     for d in ds.iterrows():
-        prompt = create_prompt(d, shots=5, shot_dir='data/ordering/ordering_shots_mcq.csv')
-        output = generate(model, tokenizer, prompt)
+        prompt = create_prompt(d, shots=shots, shot_dir=dir.replace('_', '_shots_'))
+        try:
+            output = generate(model, tokenizer, prompt)
+        except Exception as e:  # runtime error
+            print(e)
+            continue
         output_wo_prompt = [o.replace(prompt, '') for o in output]
         outputs.append(output_wo_prompt)
-        if d[0] == 50:
+        if d[0] == 30:
+            print(prompt)
             break
     output_df = pd.DataFrame(outputs, columns=[f'g{i}' for i in range(len(outputs[0]))])
     output_df.to_json(output_file)#, encoding='utf-8')
@@ -70,4 +75,4 @@ def run_dataset(dir, prompting="5-shot", output_file='outputs/ordering_mcq.json'
 
 if __name__=='__main__':
     logging.basicConfig(filename='../log/test.log', format=f'%(levelname)s: %(message)s', level=logging.INFO, filemode='w')
-    run_dataset('data/ordering/ordering_mcq.csv')
+    run_dataset('data/duration/duration_mcq.csv', shots=0, output_file='outputs/duration_mcq_0shot_nochat.json')
