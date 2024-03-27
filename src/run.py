@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import accelerate
+import json
 import logging
 import pandas as pd
 from transformers import (
@@ -9,6 +10,7 @@ from transformers import (
     BitsAndBytesConfig,
     set_seed
     )
+import random
 import torch
 
 from prompting import read_data, few_shot, create_prompt
@@ -18,6 +20,9 @@ from prompting import read_data, few_shot, create_prompt
 set_seed(42)
 torch.manual_seed(42)
 torch.cuda.manual_seed_all(42)
+
+logging.basicConfig(filename='log/test.log', format=f'%(levelname)s: %(message)s',
+        level=logging.INFO, filemode='w')
 
 # Model names: "chrisyuan45/TimeLlama-7b-chat", "chrisyuan45/TimeLlama-13b-chat"
 model_name = "chrisyuan45/TimeLlama-7b"
@@ -30,7 +35,6 @@ quantization_config = BitsAndBytesConfig.from_dict({
 model = LlamaForCausalLM.from_pretrained(
         model_name,
         return_dict=True,
-        #load_in_8bit=True,
         quantization_config = quantization_config,
         device_map="auto",
         low_cpu_mem_usage=True)
@@ -39,6 +43,7 @@ tokenizer = LlamaTokenizer.from_pretrained(model_name)
 logging.info('Tokenizer loaded.')
 
 def generate(model, tokenizer, prompt):
+    """Generate 5 outputs from a prompt."""
     input_ids = tokenizer.encode(prompt, return_tensors="pt")
     input_ids = input_ids.to('cuda')
     ids = model.generate(input_ids,
@@ -50,29 +55,69 @@ def generate(model, tokenizer, prompt):
                         repetition_penalty=1.0,
                         length_penalty=1,
                         no_repeat_ngram_size=2)
-    output = [tokenizer.decode(ids[i], skip_special_tokens=True) for i in range(len(ids))]
-    logging.info('Generated.')
+    output = [tokenizer.decode(ids[i], skip_special_tokens=True) 
+                        for i in range(len(ids))]
     return output
 
-def run_dataset(dir, shots=5, output_file='outputs/ordering_mcq_5shot.json'):
+def run_dataset(dir, shots=5, output_file='', num_instances=10):
+    """
+    Generate outputs for a given dataset directory.
+
+    Parameters:
+        dir (str): The directory containing the dataset files.
+        shots (int, optional): The number of shots to generate for each prompt.
+            Default is 5.
+        output_file (str, optional): The path to the output file where the
+            generated outputs will be saved in JSON format. Default is ''.
+        num_instances (int, optional): The number of instances to sample from
+            the dataset. Default is 10.
+
+    Returns:
+        None
+
+    Generates outputs for a given dataset by sampling instances and generating
+    outputs using a pre-trained model. Outputs are generated for each instance
+    and stored in a dictionary, which is then saved to a JSON file if
+    output_file is provided. Each output includes the prompt, generated outputs,
+    and original question, answer, and category of the instance.
+    """
     ds = read_data(dir)
-    outputs = []
-    for d in ds.iterrows():
-        prompt = create_prompt(d, shots=shots, shot_dir=dir.replace('_', '_shots_'))
+    # sample from the dataset
+    ds_sample = ds.sample(n=num_instances, random_state=42)
+    outputs = dict()
+    # check question type mcq or saq
+    mcq = dir.endswith('_mcq.csv')
+    for d in ds_sample.iterrows():
+        prompt = create_prompt(d, shots=shots,
+                        shot_dir=dir.replace('_', '_shots_'), mcq=mcq)
         try:
             output = generate(model, tokenizer, prompt)
         except Exception as e:  # runtime error
-            print(e)
+            logging.error(e)
             continue
         output_wo_prompt = [o.replace(prompt, '') for o in output]
-        outputs.append(output_wo_prompt)
-        if d[0] == 30:
-            print(prompt)
-            break
-    output_df = pd.DataFrame(outputs, columns=[f'g{i}' for i in range(len(outputs[0]))])
-    output_df.to_json(output_file)#, encoding='utf-8')
+        outputs[str(d[0])] = {"Question": d[1].Question,
+            "Answer": d[1].Answer,
+            "Category": d[1].Category,
+            "Outputs": output_wo_prompt}
+        if mcq:
+            outputs[str(d[0])]["Options"] = list(d[1:4])
+    print(prompt)
+    if output_file:
+        with open(output_file, 'w', encoding='utf-8') as fp:
+            json.dump(outputs, fp, indent=4)
+        logging.INFO(f'Finished {output_file}.')
 
 
 if __name__=='__main__':
-    logging.basicConfig(filename='../log/test.log', format=f'%(levelname)s: %(message)s', level=logging.INFO, filemode='w')
-    run_dataset('data/duration/duration_mcq.csv', shots=0, output_file='outputs/duration_mcq_0shot_nochat.json')
+    for d in ['duration', 'ordering']:
+        # mcq questions
+        run_dataset(f'data/{d}/{d}_mcq.csv', shots=0,
+            output_file=f'outputs/{d}_mcq_0shot_nc.json')
+        run_dataset(f'data/{d}/{d}_mcq.csv', shots=5,
+            output_file=f'outputs/{d}_mcq_5shot_nc.json')
+        # saq questions
+        run_dataset(f'data/{d}/{d}_saq.csv', shots=0,
+            output_file=f'outputs/{d}_saq_0shot_nc.json')
+        run_dataset(f'data/{d}/{d}_saq.csv', shots=5,
+            output_file=f'outputs/{d}_saq_5shot_nc.json')
