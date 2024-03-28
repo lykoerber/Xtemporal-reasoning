@@ -2,6 +2,7 @@
 import accelerate
 import json
 import logging
+import os
 import pandas as pd
 from transformers import (
     LlamaConfig,
@@ -24,23 +25,27 @@ torch.cuda.manual_seed_all(42)
 logging.basicConfig(filename='log/test.log', format=f'%(levelname)s: %(message)s',
         level=logging.INFO, filemode='w')
 
-# Model names: "chrisyuan45/TimeLlama-7b-chat", "chrisyuan45/TimeLlama-13b-chat"
-model_name = "chrisyuan45/TimeLlama-7b"
-quantization_config = BitsAndBytesConfig.from_dict({
-    'load_in_4bit': True,
-    'bnb_4bit_compute_dtype': torch.float16,
-    'bnb_4bit_quant_type': 'nf4',
-    'bnb_4bit_use_double_quant':True})
+def set_up_model(chat=False):
+    if chat:
+        model_name = "chrisyuan45/TimeLlama-7b-chat"
+    else:
+        model_name = "chrisyuan45/TimeLlama-7b"
+    quantization_config = BitsAndBytesConfig.from_dict({
+        'load_in_4bit': True,
+        'bnb_4bit_compute_dtype': torch.float16,
+        'bnb_4bit_quant_type': 'nf4',
+        'bnb_4bit_use_double_quant':True})
 
-model = LlamaForCausalLM.from_pretrained(
-        model_name,
-        return_dict=True,
-        quantization_config = quantization_config,
-        device_map="auto",
-        low_cpu_mem_usage=True)
-logging.info(f'Model {model} loaded.')
-tokenizer = LlamaTokenizer.from_pretrained(model_name)
-logging.info('Tokenizer loaded.')
+    model = LlamaForCausalLM.from_pretrained(
+            model_name,
+            return_dict=True,
+            quantization_config = quantization_config,
+            device_map="auto",
+            low_cpu_mem_usage=True)
+    logging.info(f'Model {model} loaded.')
+    tokenizer = LlamaTokenizer.from_pretrained(model_name)
+    logging.info('Tokenizer loaded.')
+    return model, tokenizer
 
 def generate(model, tokenizer, prompt):
     """Generate 5 outputs from a prompt."""
@@ -59,7 +64,7 @@ def generate(model, tokenizer, prompt):
                         for i in range(len(ids))]
     return output
 
-def run_dataset(dir, shots=5, output_file='', num_instances=10):
+def run_dataset(dir, model, tokenizer, shots=5, output_file='', num_instances=10):
     """
     Generate outputs for a given dataset directory.
 
@@ -108,16 +113,21 @@ def run_dataset(dir, shots=5, output_file='', num_instances=10):
             json.dump(outputs, fp, indent=4)
         logging.INFO(f'Finished {output_file}.')
 
-
-if __name__=='__main__':
-    for d in ['duration', 'ordering']:
-        # mcq questions
-        run_dataset(f'data/{d}/{d}_mcq.csv', shots=0,
-            output_file=f'outputs/{d}_mcq_0shot_nc.json')
-        run_dataset(f'data/{d}/{d}_mcq.csv', shots=5,
-            output_file=f'outputs/{d}_mcq_5shot_nc.json')
-        # saq questions
+def run_dataset_all(d, model, tokenizer):
+    """Generate outputs for a whole dataset, in 0- and 5-shot scenarios."""
+    # mcq questions
+    run_dataset(f'data/{d}/{d}_mcq.csv', shots=0,
+        output_file=f'outputs/{d}_mcq_0shot_nc.json')
+    run_dataset(f'data/{d}/{d}_mcq.csv', shots=5,
+        output_file=f'outputs/{d}_mcq_5shot_nc.json')
+    # saq questions, not in all subcorpora
+    if os.path.exists(f'data/{d}/{d}_saq.csv'):
         run_dataset(f'data/{d}/{d}_saq.csv', shots=0,
             output_file=f'outputs/{d}_saq_0shot_nc.json')
         run_dataset(f'data/{d}/{d}_saq.csv', shots=5,
             output_file=f'outputs/{d}_saq_5shot_nc.json')
+
+if __name__=='__main__':
+    model, tokenizer = set_up_model()
+    for d in os.listdir('data'):
+        run_dataset_all(d)

@@ -28,6 +28,9 @@ In case you are encountering access/login issues with Huggingface, you might hav
 To reproduce the experiments, run `python src/run.py` or `sbatch run.sh` on a GPU.
 The output analyses can be found in TODO.
 
+## References
+* model: TimeLlama [Paper](https://arxiv.org/abs/2310.01074) [GitHub](https://github.com/chenhan97/TimeLlama) [HuggingFace](https://huggingface.co/chrisyuan45/TimeLlama-7b)
+* dataset: TRAM [Paper](https://arxiv.org/abs/2310.00835) [GitHub](https://github.com/EternityYW/TRAM-Benchmark/tree/main)
 
 ## Author
 Lydia Körber

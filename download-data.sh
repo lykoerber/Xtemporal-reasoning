@@ -23,3 +23,10 @@ for corpus in "${subcorpora[@]}"; do
     rm "$corpus.zip"
     cd ..
 done
+
+# merge nli saq and mcq datasets into one directory
+mkdir nli
+mv nli_mcq/* nli
+mv nli_saq/* nli
+rm nli_mcq
+rm nli_saq
