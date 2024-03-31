@@ -11,7 +11,7 @@ def read_data(dir):
     df = pd.read_csv(dir)
     return df
 
-def few_shot(shot_dir, shots=5, mcq=True, category=""):
+def few_shot(shot_dir: str, shots: int=5, mcq: bool=True, category: str=""):
     """
     Generate a prompt string containing few-shot examples.
 
@@ -50,7 +50,8 @@ def few_shot(shot_dir, shots=5, mcq=True, category=""):
         prompt_str += f"Question: {row.Question}{option_str}\nAnswer: {row.Answer}\n\n\n"
     return prompt_str
 
-def create_prompt(data, shots=5, shot_dir='../data/ordering/ordering_shots_mcq.csv', mcq=True):
+def create_prompt(data: tuple, shots: int=5, shot_dir: str='../data/ordering/ordering_shots_mcq.csv',
+        mcq: bool=True):
     """
     Generate a prompt string for the given data.
 
@@ -74,16 +75,18 @@ def create_prompt(data, shots=5, shot_dir='../data/ordering/ordering_shots_mcq.c
     """
     prompt_str = ""
     if shots > 0:
+        prompt_str += f'Here are {shots} examples of questions and answers.\n\n'
         prompt_str += few_shot(shot_dir, shots, mcq, category=data[1].Category)
+        prompt_str += 'Please give a short answer to the following question.\n\n'
     option_str = ''
     if mcq:
         options = list(data[1][1:4])
         option_str = f'\nOptions: (A) {options[0]} (B) {options[1]} (C) {options[2]}'
         prompt_str += f"Question: {data[1][0]}{option_str}\n"
-        prompt_str += "Answer A, B, or C."
+        prompt_str += "Answer: "
     else:  # saq / short-answer question
         prompt_str += f"Question: {data[1][0]}{option_str}\n"
-        prompt_str += "Answer:"
+        prompt_str += "Answer: "
     return prompt_str
 
 

@@ -28,5 +28,5 @@ done
 mkdir nli
 mv nli_mcq/* nli
 mv nli_saq/* nli
-rm nli_mcq
-rm nli_saq
+rm -r nli_mcq
+rm -r nli_saq

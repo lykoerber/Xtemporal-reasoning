@@ -22,10 +22,10 @@ set_seed(42)
 torch.manual_seed(42)
 torch.cuda.manual_seed_all(42)
 
-logging.basicConfig(filename='log/test.log', format=f'%(levelname)s: %(message)s',
+logging.basicConfig(filename='log/run.log', format=f'%(levelname)s: %(message)s',
         level=logging.INFO, filemode='w')
 
-def set_up_model(chat=False):
+def set_up_model(chat: bool=False):
     if chat:
         model_name = "chrisyuan45/TimeLlama-7b-chat"
     else:
@@ -42,12 +42,12 @@ def set_up_model(chat=False):
             quantization_config = quantization_config,
             device_map="auto",
             low_cpu_mem_usage=True)
-    logging.info(f'Model {model} loaded.')
+    logging.info(f'Model {model_name} loaded.')
     tokenizer = LlamaTokenizer.from_pretrained(model_name)
     logging.info('Tokenizer loaded.')
     return model, tokenizer
 
-def generate(model, tokenizer, prompt):
+def generate(model, tokenizer, prompt: str):
     """Generate 5 outputs from a prompt."""
     input_ids = tokenizer.encode(prompt, return_tensors="pt")
     input_ids = input_ids.to('cuda')
@@ -64,7 +64,8 @@ def generate(model, tokenizer, prompt):
                         for i in range(len(ids))]
     return output
 
-def run_dataset(dir, model, tokenizer, shots=5, output_file='', num_instances=10):
+def run_dataset(dir: str, model, tokenizer, shots: int=5, output_file: str='',
+        num_instances: int=5, by_category=True):
     """
     Generate outputs for a given dataset directory.
 
@@ -87,47 +88,58 @@ def run_dataset(dir, model, tokenizer, shots=5, output_file='', num_instances=10
     and original question, answer, and category of the instance.
     """
     ds = read_data(dir)
-    # sample from the dataset
-    ds_sample = ds.sample(n=num_instances, random_state=42)
     outputs = dict()
-    # check question type mcq or saq
-    mcq = dir.endswith('_mcq.csv')
-    for d in ds_sample.iterrows():
-        prompt = create_prompt(d, shots=shots,
-                        shot_dir=dir.replace('_', '_shots_'), mcq=mcq)
-        try:
-            output = generate(model, tokenizer, prompt)
-        except Exception as e:  # runtime error
-            logging.error(e)
-            continue
-        output_wo_prompt = [o.replace(prompt, '') for o in output]
-        outputs[str(d[0])] = {"Question": d[1].Question,
-            "Answer": d[1].Answer,
-            "Category": d[1].Category,
-            "Outputs": output_wo_prompt}
-        if mcq:
-            outputs[str(d[0])]["Options"] = list(d[1:4])
-    print(prompt)
+    if by_category:  # split into subsets by category
+        sub_dataframes = dict(tuple(ds.groupby('Category')))
+    else:  # whole dataframe
+        sub_dataframes = dict(('all', ds))
+    for category, sub_df in sub_dataframes.items():
+        # sample from the dataset
+        ds_sample = sub_df.sample(n=num_instances, random_state=42)
+        # check question type mcq or saq
+        mcq = dir.endswith('_mcq.csv')
+        for d in ds_sample.iterrows():
+            prompt = create_prompt(d, shots=shots,
+                            shot_dir=dir.replace('_', '_shots_'), mcq=mcq)
+            try:
+                output = generate(model, tokenizer, prompt)
+                # output = ['x', 'y', 'z', 'whoops', 'yay']
+            except Exception as e:  # runtime error
+                logging.error(e)
+                continue
+            output_wo_prompt = [o.replace(prompt, '') for o in output]
+            outputs[str(d[0])] = {"Question": d[1].Question,
+                "Answer": d[1].Answer,
+                "Category": d[1].Category,
+                "Outputs": output_wo_prompt}
+            if mcq:
+                outputs[str(d[0])]["Options"] = list(d[1][1:4])
+    print(output_file, prompt)
     if output_file:
         with open(output_file, 'w', encoding='utf-8') as fp:
-            json.dump(outputs, fp, indent=4)
-        logging.INFO(f'Finished {output_file}.')
+            json.dump(outputs, fp, indent=4, ensure_ascii=False)
+        logging.info(f'Finished {output_file}.')
 
-def run_dataset_all(d, model, tokenizer):
+def run_dataset_all(d: str, model, tokenizer, chat_model: bool=False):
     """Generate outputs for a whole dataset, in 0- and 5-shot scenarios."""
+    if chat_model:
+        output_dir = 'outputs/timellama-7b-chat'
+    else:
+        output_dir = 'outputs/timellama-7b'
     # mcq questions
-    run_dataset(f'data/{d}/{d}_mcq.csv', shots=0,
-        output_file=f'outputs/{d}_mcq_0shot_nc.json')
-    run_dataset(f'data/{d}/{d}_mcq.csv', shots=5,
-        output_file=f'outputs/{d}_mcq_5shot_nc.json')
+    run_dataset(f'data/{d}/{d}_mcq.csv', model, tokenizer, shots=0,
+        output_file=f'{output_dir}/{d}_mcq_0shot_nc.json')
+    run_dataset(f'data/{d}/{d}_mcq.csv', model, tokenizer, shots=5,
+        output_file=f'{output_dir}/{d}_mcq_5shot_nc.json')
     # saq questions, not in all subcorpora
     if os.path.exists(f'data/{d}/{d}_saq.csv'):
-        run_dataset(f'data/{d}/{d}_saq.csv', shots=0,
-            output_file=f'outputs/{d}_saq_0shot_nc.json')
-        run_dataset(f'data/{d}/{d}_saq.csv', shots=5,
-            output_file=f'outputs/{d}_saq_5shot_nc.json')
+        run_dataset(f'data/{d}/{d}_saq.csv', model, tokenizer, shots=0,
+            output_file=f'{output_dir}/{d}_saq_0shot_nc.json')
+        run_dataset(f'data/{d}/{d}_saq.csv', model, tokenizer, shots=5,
+            output_file=f'{output_dir}/{d}_saq_5shot_nc.json')
 
 if __name__=='__main__':
-    model, tokenizer = set_up_model()
+    chat_model = False
+    model, tokenizer = set_up_model(chat_model)
     for d in os.listdir('data'):
-        run_dataset_all(d)
+        run_dataset_all(d, model, tokenizer, chat_model)
