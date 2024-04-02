@@ -14,7 +14,7 @@ from transformers import (
 import random
 import torch
 
-from prompting import read_data, few_shot, create_prompt
+from prompting import read_data, few_shot, create_prompt, parse_row
 
 
 # random seed for reproducibility
@@ -90,7 +90,10 @@ def run_dataset(dir: str, model, tokenizer, shots: int=5, output_file: str='',
     ds = read_data(dir)
     outputs = dict()
     if by_category:  # split into subsets by category
-        sub_dataframes = dict(tuple(ds.groupby('Category')))
+        try:
+            sub_dataframes = dict(tuple(ds.groupby('Category')))
+        except:
+            sub_dataframes = dict(tuple(ds.groupby('Source')))
     else:  # whole dataframe
         sub_dataframes = dict(('all', ds))
     for category, sub_df in sub_dataframes.items():
@@ -99,8 +102,12 @@ def run_dataset(dir: str, model, tokenizer, shots: int=5, output_file: str='',
         # check question type mcq or saq
         mcq = dir.endswith('_mcq.csv')
         for d in ds_sample.iterrows():
+            if mcq:
+                shot_dir = dir.replace('_mcq', '_shots_mcq')
+            else:
+                shot_dir = dir.replace('_saq', '_shots_saq')
             prompt = create_prompt(d, shots=shots,
-                            shot_dir=dir.replace('_', '_shots_'), mcq=mcq)
+                            shot_dir=shot_dir, mcq=mcq)
             try:
                 output = generate(model, tokenizer, prompt)
                 # output = ['x', 'y', 'z', 'whoops', 'yay']
@@ -108,12 +115,14 @@ def run_dataset(dir: str, model, tokenizer, shots: int=5, output_file: str='',
                 logging.error(e)
                 continue
             output_wo_prompt = [o.replace(prompt, '') for o in output]
-            outputs[str(d[0])] = {"Question": d[1].Question,
-                "Answer": d[1].Answer,
-                "Category": d[1].Category,
-                "Outputs": output_wo_prompt}
-            if mcq:
-                outputs[str(d[0])]["Options"] = list(d[1][1:4])
+            question, category, options, answer = parse_row(d[1])
+            outputs[str(d[0])] = {
+                "Question": question,
+                "Answer": answer,
+                "Options": options,
+                "Outputs": output_wo_prompt,
+                "Category": category
+                }
     print(output_file, prompt)
     if output_file:
         with open(output_file, 'w', encoding='utf-8') as fp:
@@ -141,5 +150,5 @@ def run_dataset_all(d: str, model, tokenizer, chat_model: bool=False):
 if __name__=='__main__':
     chat_model = False
     model, tokenizer = set_up_model(chat_model)
-    for d in os.listdir('data'):
+    for d in os.listdir('data')[6:]:
         run_dataset_all(d, model, tokenizer, chat_model)
