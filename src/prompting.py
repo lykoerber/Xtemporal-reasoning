@@ -19,17 +19,17 @@ def parse_row(row, dirname, mcq: bool=True):
     # options
     options = []
     if mcq:
-        option_cols = [c for c in list(row.columns) if c.startswith('Option')]
+        option_cols = [c for c in list(row.index) if c.startswith('Option')]
         options = [row[c] for c in option_cols]
     # question
     question = ''
     if 'nli' in dirname:
-        question += f"Premise: {row.Premise}\nHypothesis: {row.Hypothesis}\nQuestion: "
+        question += f"Premise: {row.Premise}\nHypothesis: {row.Hypothesis}\n"
     elif 'causality' in dirname:
-        question += f"Premise: {row.Premise}\nQuestion: "
+        question += f"Premise: {row.Premise}\n"
     elif 'storytelling' in dirname:
-        question += f"Story: {row.Story}\nQuestion: "
-    question += row.Question
+        question += f"Story: {row.Story}\n"
+    question += f"Question: {row.Question}"
     # category
     try:
         category = row.Category
@@ -75,29 +75,17 @@ def few_shot(shot_dir: str, shots: int=5, mcq: bool=True, category: str=""):
         else:  # choose randomly
             ex_index = random.randint(0, len(df) - 1)
             row = df.iloc[ex_index]
+        question, category, options, answer = parse_row(row, shot_dir, mcq)
+        #print(question, category, options, answer)
         option_str = ''
         if mcq:
-            if 'arithmetic' in shot_dir:  # 4 options
-                options = list(row[1:5])
-                option_str = f'\nOptions: (A) {options[0]} (B) {options[1]} (C) {options[2]} (D) {options[3]}'
-            elif 'causality' in shot_dir:  # 2 options
-                options = list(row[1:3])
-                option_str = f'\nOptions: (A) {options[0]} (B) {options[1]}'
-            elif 'storytelling' in shot_dir:
-                options = list(row[2:4])
-                option_str = f'\nOptions: (A) {options[0]} (B) {options[1]}'
-            elif 'nli' in shot_dir:  # different format
-                options = list(row[3:6])
-                option_str = f'\nOptions: (A) {options[0]} (B) {options[1]} (C) {options[2]}'
-            else:  # 3 options
-                options = list(row[1:4])
-                option_str = f'\nOptions: (A) {options[0]} (B) {options[1]} (C) {options[2]}'
-        if 'nli' in shot_dir:  # different format
-            prompt_str += f"Premise: {row.Premise}\nHypothesis: {row.Hypothesis}\nQuestion: {row.Question}{option_str}\nAnswer: {row.Answer}\n\n\n"
-        elif 'storytelling' in shot_dir:
-            prompt_str += f"Story: {row.Story}\nQuestion: {row.Question}{option_str}\nAnswer: {row.Answer}\n\n\n"
-        else:
-            prompt_str += f"Question: {row.Question}{option_str}\nAnswer: {row.Answer}\n\n\n"
+            option_str += f'\nOptions: (A) {options[0]} (B) {options[1]}'
+            if len(options) > 2:
+                option_str += f' (C) {options[2]}'
+                if len(options) > 3:
+                    option_str += f' (D) {options[3]}'
+            option_str += '\n'
+        prompt_str += f"{question}{option_str}\nAnswer: {answer}\n\n\n"
     return prompt_str
 
 def create_prompt(data: tuple, shots: int=5, shot_dir: str='../data/ordering/ordering_shots_mcq.csv',
@@ -132,37 +120,26 @@ def create_prompt(data: tuple, shots: int=5, shot_dir: str='../data/ordering/ord
             cat = data[1].Source
         prompt_str += few_shot(shot_dir, shots, mcq, category=cat)
         prompt_str += 'Please give a short answer to the following question.\n\n'
+    question, category, options, answer = parse_row(data[1], shot_dir, mcq)
     option_str = ''
-    if 'nli' in shot_dir:  # different format
-        if mcq:
-            options = list(data[1][3:6])
-            option_str = f'\nOptions: (A) {options[0]} (B) {options[1]} (C) {options[2]}'
-        prompt_str += f"Premise: {data[1].Premise}\nHypothesis: {data[1].Hypothesis}\nQuestion: {data[1].Question}{option_str}\nAnswer: "
-        return prompt_str
-    elif 'storytelling' in shot_dir:
-        if mcq:
-            options = list(data[1][2:4])
-            option_str = f'\nOptions: (A) {options[0]} (B) {options[1]}'
-        prompt_str += f"Story: {data[1].Story}\nQuestion: {data[1].Question}{option_str}\nAnswer: "
-        return prompt_str
     if mcq:
-        if 'arithmetic' in shot_dir:  # 4 options
-            options = list(data[1][1:5])
-            option_str = f'\nOptions: (A) {options[0]} (B) {options[1]} (C) {options[2]} (D) {options[3]}'
-        elif 'causality' in shot_dir:  # 2 options
-            options = list(data[1][1:3])
-            option_str = f'\nOptions: (A) {options[0]} (B) {options[1]}'
-        elif 'nli' in shot_dir:  # different format
-            options = list(data[1][3:6])
-            option_str = f'\nOptions: (A) {options[0]} (B) {options[1]} (C) {options[2]}'
-        else:  # 3 options
-            options = list(data[1][1:4])
-            option_str = f'\nOptions: (A) {options[0]} (B) {options[1]} (C) {options[2]}'
-        prompt_str += f"Question: {data[1][0]}{option_str}\n"
-        prompt_str += "Answer: "
-    else:  # saq / short-answer question
-        prompt_str += f"Question: {data[1][0]}{option_str}\n"
-        prompt_str += "Answer: "
+        option_str += f'\nOptions: (A) {options[0]} (B) {options[1]}'
+        if len(options) > 2:
+            option_str += f' (C) {options[2]}'
+            if len(options) > 3:
+                option_str += f' (D) {options[3]}'
+        option_str += '\n'
+    prompt_str += f"{question}{option_str}\n"
+    prompt_str += "Answer: "
     return prompt_str
 
-
+if __name__ == '__main__':
+    #s = few_shot(shot_dir='../data/nli/nli_shots_saq.csv', shots=5, mcq=False, category="SNLI")
+    #print(s)
+    data = 'arithmetic'
+    ds = read_data(f'../data/{data}/{data}_mcq.csv')
+    for d in ds.iterrows():
+        s2 = create_prompt(d, shot_dir=f'../data/{data}/{data}_shots_mcq.csv', mcq=True)
+        print(s2)
+        break
+    
