@@ -22,10 +22,16 @@ set_seed(42)
 torch.manual_seed(42)
 torch.cuda.manual_seed_all(42)
 
-logging.basicConfig(filename='log/run.log', format=f'%(levelname)s: %(message)s',
-        level=logging.INFO, filemode='w')
+# logging config
+if not os.path.exists('log/'):
+    os.makedirs('log/', exist_ok=True)
+logging.basicConfig(filename='log/run.log',
+                    format=f'%(asctime)s - %(levelname)s: %(message)s',
+                    level=logging.INFO,
+                    filemode='w')
 
 def set_up_model(chat: bool=False):
+    """Set up model and tokenizer."""
     if chat:
         model_name = "chrisyuan45/TimeLlama-7b-chat"
     else:
@@ -112,10 +118,10 @@ def run_dataset(dir: str, model, tokenizer, shots: int=5, output_file: str='',
                 output = generate(model, tokenizer, prompt)
                 # output = ['x', 'y', 'z', 'whoops', 'yay']
             except Exception as e:  # runtime error
-                logging.error(e)
+                logging.error(f'{d[0]}:{e}')
                 continue
             output_wo_prompt = [o.replace(prompt, '') for o in output]
-            question, category, options, answer = parse_row(d[1])
+            question, category, options, answer = parse_row(d[1], dir, mcq)
             outputs[str(d[0])] = {
                 "Question": question,
                 "Answer": answer,
@@ -123,7 +129,6 @@ def run_dataset(dir: str, model, tokenizer, shots: int=5, output_file: str='',
                 "Outputs": output_wo_prompt,
                 "Category": category
                 }
-    print(output_file, prompt)
     if output_file:
         with open(output_file, 'w', encoding='utf-8') as fp:
             json.dump(outputs, fp, indent=4, ensure_ascii=False)
@@ -148,7 +153,13 @@ def run_dataset_all(d: str, model, tokenizer, chat_model: bool=False):
             output_file=f'{output_dir}/{d}_saq_5shot_nc.json')
 
 if __name__=='__main__':
+    # create output directories
+    if not os.path.exists('outputs/'):
+        os.makedirs('outputs/', exist_ok=True)
+        os.makedirs('outputs/timellama-7b/', exist_ok=True)
+        os.makedirs('outputs/timellama-7b-chat/', exist_ok=True)
     chat_model = False
     model, tokenizer = set_up_model(chat_model)
-    for d in os.listdir('data')[6:]:
+    # model, tokenizer = None, None
+    for d in os.listdir('data'):
         run_dataset_all(d, model, tokenizer, chat_model)

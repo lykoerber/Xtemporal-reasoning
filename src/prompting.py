@@ -77,15 +77,16 @@ def few_shot(shot_dir: str, shots: int=5, mcq: bool=True, category: str=""):
             row = df.iloc[ex_index]
         question, category, options, answer = parse_row(row, shot_dir, mcq)
         #print(question, category, options, answer)
-        option_str = ''
+        option_str = '\n'
         if mcq:
-            option_str += f'\nOptions: (A) {options[0]} (B) {options[1]}'
+            option_str += f'Options: (A) {options[0]} (B) {options[1]}'
             if len(options) > 2:
                 option_str += f' (C) {options[2]}'
                 if len(options) > 3:
                     option_str += f' (D) {options[3]}'
             option_str += '\n'
-        prompt_str += f"{question}{option_str}\nAnswer: {answer}\n\n\n"
+        prompt_str += f"{question}{option_str}Answer: {answer}\n\n"
+    prompt_str += '\n'
     return prompt_str
 
 def create_prompt(data: tuple, shots: int=5, shot_dir: str='../data/ordering/ordering_shots_mcq.csv',
@@ -129,7 +130,7 @@ def create_prompt(data: tuple, shots: int=5, shot_dir: str='../data/ordering/ord
             if len(options) > 3:
                 option_str += f' (D) {options[3]}'
         option_str += '\n'
-    prompt_str += f"{question}{option_str}\n"
+    prompt_str += f"{question}{option_str}"
     prompt_str += "Answer: "
     return prompt_str
 
