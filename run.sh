@@ -1,11 +1,11 @@
 #!/bin/bash
 
 #SBATCH --job-name=timellama
-#SBATCH --output=outputs/output-run1.txt
+#SBATCH --output=outputs/output-run-nc.txt
 #SBATCH --mail-user=koerber@cl.uni-heidelberg.de
 #SBATCH --mail-type=ALL
-#SBATCH --time=12:00:00
-#SBATCH --mem=40000
+#SBATCH --time=20:00:00
+#SBATCH --mem=45000
 #SBATCH --gres=gpu:1
 #SBATCH --partition=students
 

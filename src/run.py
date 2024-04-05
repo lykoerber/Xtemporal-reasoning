@@ -25,7 +25,7 @@ torch.cuda.manual_seed_all(42)
 # logging config
 if not os.path.exists('log/'):
     os.makedirs('log/', exist_ok=True)
-logging.basicConfig(filename='log/run.log',
+logging.basicConfig(filename='log/run2.log',
                     format=f'%(asctime)s - %(levelname)s: %(message)s',
                     level=logging.INFO,
                     filemode='w')
@@ -137,9 +137,9 @@ def run_dataset(dir: str, model, tokenizer, shots: int=5, output_file: str='',
 def run_dataset_all(d: str, model, tokenizer, chat_model: bool=False):
     """Generate outputs for a whole dataset, in 0- and 5-shot scenarios."""
     if chat_model:
-        output_dir = 'outputs/timellama-7b-chat'
+        output_dir = 'output/timellama-7b-chat'
     else:
-        output_dir = 'outputs/timellama-7b'
+        output_dir = 'output/timellama-7b'
     # mcq questions
     run_dataset(f'data/{d}/{d}_mcq.csv', model, tokenizer, shots=0,
         output_file=f'{output_dir}/{d}_mcq_0shot_nc.json')
@@ -154,10 +154,10 @@ def run_dataset_all(d: str, model, tokenizer, chat_model: bool=False):
 
 if __name__=='__main__':
     # create output directories
-    if not os.path.exists('outputs/'):
-        os.makedirs('outputs/', exist_ok=True)
-        os.makedirs('outputs/timellama-7b/', exist_ok=True)
-        os.makedirs('outputs/timellama-7b-chat/', exist_ok=True)
+    if not os.path.exists('output/'):
+        os.makedirs('output/', exist_ok=True)
+        os.makedirs('output/timellama-7b/', exist_ok=True)
+        os.makedirs('output/timellama-7b-chat/', exist_ok=True)
     chat_model = False
     model, tokenizer = set_up_model(chat_model)
     # model, tokenizer = None, None
