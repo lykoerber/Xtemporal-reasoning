@@ -4,17 +4,19 @@ import pandas as pd
 
 random.seed(42)
 
+
 def read_data(dir):
     # mcq (multiple choice question)
     # saq (short answer question)
     # shots (for 5-shot scenario)
     try:
         df = pd.read_csv(dir)
-    except:
+    except Exception:
         df = pd.read_csv(dir, engine='python', encoding_errors='ignore')
     return df
 
-def parse_row(row, dirname, mcq: bool=True):
+
+def parse_row(row, dirname, mcq: bool = True):
     """parse different columns of a dataframe row"""
     # options
     options = []
@@ -33,13 +35,15 @@ def parse_row(row, dirname, mcq: bool=True):
     # category
     try:
         category = row.Category
-    except:
+    except Exception:
         category = row.Source
     # answer
     answer = row.Answer
     return question, category, options, answer
 
-def few_shot(shot_dir: str, shots: int=5, mcq: bool=True, category: str=""):
+
+def few_shot(shot_dir: str, shots: int = 5, mcq: bool = True,
+             category: str = ""):
     """
     Generate a prompt string containing few-shot examples.
 
@@ -56,9 +60,10 @@ def few_shot(shot_dir: str, shots: int=5, mcq: bool=True, category: str=""):
         str: A prompt string containing few-shot examples of questions and
             answers, as well as options of MCQ questions.
 
-    Reads shot examples from the specified CSV file and generates few-shot examples.
-    The function can subset examples based on a specified category.
-    Returns a prompt string containing few-shot examples formatted with questions, options (if MCQ), and answers.
+    Reads shot examples from the specified CSV file and generates few-shot 
+    examples. The function can subset examples based on a specified category.
+    Returns a prompt string containing few-shot examples formatted with
+    questions, options (if MCQ), and answers.
     """
     df = pd.read_csv(shot_dir)
     prompt_str = ""
@@ -66,7 +71,7 @@ def few_shot(shot_dir: str, shots: int=5, mcq: bool=True, category: str=""):
         try:  # filter by category
             cat_df = df[df['Category'] == category]
             cat_df.reset_index(drop=True, inplace=True)
-        except:  # use source instead
+        except Exception:  # use source instead
             cat_df = df[df['Source'] == category]
             cat_df.reset_index(drop=True, inplace=True)
     for i in range(shots):
@@ -76,7 +81,6 @@ def few_shot(shot_dir: str, shots: int=5, mcq: bool=True, category: str=""):
             ex_index = random.randint(0, len(df) - 1)
             row = df.iloc[ex_index]
         question, category, options, answer = parse_row(row, shot_dir, mcq)
-        #print(question, category, options, answer)
         option_str = '\n'
         if mcq:
             option_str += f'Options: (A) {options[0]} (B) {options[1]}'
@@ -89,13 +93,14 @@ def few_shot(shot_dir: str, shots: int=5, mcq: bool=True, category: str=""):
     prompt_str += '\n'
     return prompt_str
 
-def create_prompt(data: tuple, shots: int=5, shot_dir: str='../data/ordering/ordering_shots_mcq.csv',
-        mcq: bool=True):
+
+def create_prompt(data: tuple, shots: int = 5, shot_dir: str = 'data/',
+                    mcq: bool = True):
     """
     Generate a prompt string for the given data.
 
     Parameters:
-        data (tuple): A tuple containing row index and row data from a DataFrame.
+        data (tuple): Tuple containing row index and row data from a DataFrame.
         shots (int, optional): The number of few-shot examples to include in
             the prompt. Default is 5.
         shot_dir (str, optional): The path to the CSV file containing shot
@@ -117,7 +122,7 @@ def create_prompt(data: tuple, shots: int=5, shot_dir: str='../data/ordering/ord
         prompt_str += f'Here are {shots} examples of questions and answers.\n\n'
         try:
             cat = data[1].Category
-        except:
+        except Exception:
             cat = data[1].Source
         prompt_str += few_shot(shot_dir, shots, mcq, category=cat)
         prompt_str += 'Please give a short answer to the following question.\n\n'
@@ -134,13 +139,14 @@ def create_prompt(data: tuple, shots: int=5, shot_dir: str='../data/ordering/ord
     prompt_str += "Answer: "
     return prompt_str
 
+
 if __name__ == '__main__':
-    #s = few_shot(shot_dir='../data/nli/nli_shots_saq.csv', shots=5, mcq=False, category="SNLI")
-    #print(s)
+    # example prompt
     data = 'arithmetic'
     ds = read_data(f'../data/{data}/{data}_mcq.csv')
     for d in ds.iterrows():
-        s2 = create_prompt(d, shot_dir=f'../data/{data}/{data}_shots_mcq.csv', mcq=True)
+        s2 = create_prompt(d, shot_dir=f'../data/{data}/{data}_shots_mcq.csv',
+                           mcq=True)
         print(s2)
         break
-    
+
