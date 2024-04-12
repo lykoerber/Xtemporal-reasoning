@@ -2,7 +2,7 @@
 
 #SBATCH --job-name=timellama
 #SBATCH --output=outputs/output-run-nc.txt
-#SBATCH --mail-user=koerber@cl.uni-heidelberg.de
+#SBATCH --mail-user=[insert-email-here]
 #SBATCH --mail-type=ALL
 #SBATCH --time=20:00:00
 #SBATCH --mem=45000

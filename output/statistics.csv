@@ -1,0 +1,138 @@
+,name,subcorpus,mcq,5-shot,category,num_instances,average_len,whitespace,emoji,non_ascii,pattern1,pattern2,pattern3,pattern4,pattern5,pattern_unsure,pattern_unrel
+0,typical_time_saq_5shot_nc.json,typical,False,True,Commonsense,5,182.76,0,3,3,0,0,0,0,0,8,2
+1,typical_time_saq_5shot_nc.json,typical,False,True,Comparison,5,329.32,0,0,0,4,3,0,2,2,1,0
+2,typical_time_saq_5shot_nc.json,typical,False,True,Facts,5,258.88,0,3,12,0,0,0,0,0,11,0
+3,typical_time_saq_5shot_nc.json,typical,False,True,Reading Comprehension,1,188.0,0,0,1,0,0,0,0,0,0,0
+4,typical_time_mcq_0shot_nc.json,typical,True,False,Commonsense,5,260.48,0,0,3,0,9,0,0,0,1,0
+5,typical_time_mcq_0shot_nc.json,typical,True,False,Comparison,5,272.92,0,7,10,2,3,0,0,0,0,0
+6,typical_time_mcq_0shot_nc.json,typical,True,False,Facts,5,238.44,0,4,9,0,2,0,0,0,0,0
+7,typical_time_mcq_0shot_nc.json,typical,True,False,Reading Comprehension,5,281.28,0,6,11,0,4,0,0,0,0,0
+8,frequency_saq_5shot_nc.json,frequency,False,True,Application,5,278.52,0,2,4,1,0,0,1,0,10,6
+9,frequency_saq_5shot_nc.json,frequency,False,True,Commonsense,5,243.0,0,2,2,4,0,0,0,0,17,7
+10,frequency_saq_5shot_nc.json,frequency,False,True,Comparison,5,202.08,0,0,2,0,0,0,0,0,4,1
+11,frequency_saq_5shot_nc.json,frequency,False,True,Computation,5,268.16,0,1,3,3,0,0,0,1,5,3
+12,frequency_saq_5shot_nc.json,frequency,False,True,Facts,5,307.48,0,4,10,1,0,0,0,0,11,3
+13,nli_mcq_5shot_nc.json,nli,True,True,MNLI,5,300.44,0,0,0,8,0,0,0,1,6,0
+14,nli_mcq_5shot_nc.json,nli,True,True,SNLI,5,343.12,0,0,0,8,1,0,0,1,3,0
+15,frequency_mcq_5shot_nc.json,frequency,True,True,Application,5,256.0,0,0,3,4,1,1,0,0,0,0
+16,frequency_mcq_5shot_nc.json,frequency,True,True,Commonsense,5,214.96,2,0,0,6,0,0,0,0,6,2
+17,frequency_mcq_5shot_nc.json,frequency,True,True,Comparison,5,171.92,0,0,1,0,0,0,0,0,1,0
+18,frequency_mcq_5shot_nc.json,frequency,True,True,Computation,5,218.76,0,1,5,5,1,0,0,1,1,0
+19,frequency_mcq_5shot_nc.json,frequency,True,True,Facts,5,219.84,0,0,6,3,1,0,0,0,9,3
+20,storytelling_mcq_0shot_nc.json,storytelling,True,False,ROC,5,282.6,0,5,12,0,1,0,0,0,0,0
+21,storytelling_mcq_0shot_nc.json,storytelling,True,False,SCT,5,223.08,0,6,15,2,0,0,0,0,0,0
+22,arithmetic_saq_5shot_nc.json,arithmetic,False,True,Application,5,189.4,0,4,10,3,0,0,0,0,3,4
+23,arithmetic_saq_5shot_nc.json,arithmetic,False,True,Date Computation,5,235.76,0,2,6,3,2,0,0,0,14,7
+24,arithmetic_saq_5shot_nc.json,arithmetic,False,True,Hour Adjustment (12h),5,228.92,0,1,6,1,1,0,0,0,14,1
+25,arithmetic_saq_5shot_nc.json,arithmetic,False,True,Hour Adjustment (24h),5,198.36,0,3,11,0,2,0,0,0,5,1
+26,arithmetic_saq_5shot_nc.json,arithmetic,False,True,Month Shift,5,288.36,0,4,10,0,0,0,0,0,3,0
+27,arithmetic_saq_5shot_nc.json,arithmetic,False,True,Time Computation,5,159.8,0,1,8,0,1,0,0,0,4,1
+28,arithmetic_saq_5shot_nc.json,arithmetic,False,True,Time Zone Conversion,5,229.2,0,0,2,0,0,0,1,0,5,0
+29,arithmetic_saq_5shot_nc.json,arithmetic,False,True,Week Identification,5,207.44,0,3,4,2,1,0,0,0,8,2
+30,arithmetic_saq_5shot_nc.json,arithmetic,False,True,Year Shift,5,203.32,0,3,6,0,0,0,0,0,8,2
+31,ordering_saq_5shot_nc.json,ordering,False,True,Commonsense,5,308.32,0,3,3,2,0,0,0,1,2,0
+32,ordering_saq_5shot_nc.json,ordering,False,True,Facts,5,284.8,0,1,6,3,1,0,0,1,1,0
+33,frequency_mcq_0shot_nc.json,frequency,True,False,Application,5,243.2,0,2,4,1,3,0,3,0,2,0
+34,frequency_mcq_0shot_nc.json,frequency,True,False,Commonsense,5,276.28,0,2,4,0,4,0,0,0,2,0
+35,frequency_mcq_0shot_nc.json,frequency,True,False,Comparison,5,266.04,0,4,6,1,6,0,0,0,0,0
+36,frequency_mcq_0shot_nc.json,frequency,True,False,Computation,5,273.28,0,0,3,2,8,1,0,1,2,0
+37,frequency_mcq_0shot_nc.json,frequency,True,False,Facts,5,261.8,0,1,9,0,5,0,1,0,0,0
+38,frequency_mcq_0shot_nc.json,frequency,True,False,Reading Comprehension,5,308.52,0,3,6,1,2,0,1,0,0,0
+39,duration_mcq_5shot_nc.json,duration,True,True,Analogy Inference,5,248.84,1,0,1,4,0,0,2,0,2,0
+40,duration_mcq_5shot_nc.json,duration,True,True,Commonsense,5,256.76,0,1,2,3,0,0,0,0,5,0
+41,duration_mcq_5shot_nc.json,duration,True,True,Computation,5,253.0,0,0,3,0,1,0,0,0,2,0
+42,duration_mcq_5shot_nc.json,duration,True,True,Direct Comparison,5,187.92,0,1,2,3,0,1,0,0,0,0
+43,duration_mcq_5shot_nc.json,duration,True,True,Facts,5,238.2,0,3,5,3,0,0,0,0,6,2
+44,duration_mcq_5shot_nc.json,duration,True,True,Multi-Step Comparison,5,213.84,0,0,3,3,0,0,1,0,5,3
+45,ambiguity_resolution_mcq_0shot_nc.json,ambiguity,True,False,Interpretation,5,252.2,0,4,6,1,3,0,0,1,2,0
+46,ambiguity_resolution_mcq_0shot_nc.json,ambiguity,True,False,Shift - Calendar,5,250.08,0,0,14,0,2,0,0,0,0,0
+47,ambiguity_resolution_mcq_0shot_nc.json,ambiguity,True,False,Shift - LT,5,258.16,0,1,6,0,6,0,0,1,1,0
+48,ambiguity_resolution_mcq_0shot_nc.json,ambiguity,True,False,Shift - MT,5,283.8,0,0,3,2,6,1,0,1,4,0
+49,ambiguity_resolution_mcq_0shot_nc.json,ambiguity,True,False,Shift - ST,5,224.6,0,3,3,2,6,0,1,0,1,1
+50,ambiguity_resolution_mcq_5shot_nc.json,ambiguity,True,True,Interpretation,5,221.8,0,1,1,1,1,0,0,0,5,1
+51,ambiguity_resolution_mcq_5shot_nc.json,ambiguity,True,True,Shift - Calendar,5,229.68,0,2,5,2,1,0,1,0,5,1
+52,ambiguity_resolution_mcq_5shot_nc.json,ambiguity,True,True,Shift - LT,5,340.16,0,0,1,8,0,0,1,0,7,1
+53,ambiguity_resolution_mcq_5shot_nc.json,ambiguity,True,True,Shift - MT,5,278.92,0,1,3,3,0,0,0,0,7,3
+54,ambiguity_resolution_mcq_5shot_nc.json,ambiguity,True,True,Shift - ST,5,274.64,0,0,3,7,0,0,0,1,0,0
+55,causality_mcq_0shot_nc.json,causality,True,False,Cause,5,238.64,0,4,8,0,0,0,0,0,0,0
+56,causality_mcq_0shot_nc.json,causality,True,False,Effect,5,258.64,0,9,14,1,1,0,0,0,1,0
+57,arithmetic_saq_0shot_nc.json,arithmetic,False,False,Application,5,243.16,0,3,10,0,2,0,0,0,1,0
+58,arithmetic_saq_0shot_nc.json,arithmetic,False,False,Date Computation,5,230.4,0,2,11,0,1,0,0,0,0,0
+59,arithmetic_saq_0shot_nc.json,arithmetic,False,False,Hour Adjustment (12h),5,229.64,0,2,14,0,0,0,0,0,2,0
+60,arithmetic_saq_0shot_nc.json,arithmetic,False,False,Hour Adjustment (24h),5,232.76,0,2,12,0,3,0,0,0,2,0
+61,arithmetic_saq_0shot_nc.json,arithmetic,False,False,Month Shift,5,275.8,0,4,13,0,4,0,0,0,1,0
+62,arithmetic_saq_0shot_nc.json,arithmetic,False,False,Time Computation,5,201.88,0,2,6,0,2,0,0,0,0,0
+63,arithmetic_saq_0shot_nc.json,arithmetic,False,False,Time Zone Conversion,5,239.6,0,0,13,0,1,0,0,0,1,0
+64,arithmetic_saq_0shot_nc.json,arithmetic,False,False,Week Identification,5,265.2,0,2,11,0,0,0,0,0,1,0
+65,arithmetic_saq_0shot_nc.json,arithmetic,False,False,Year Shift,5,212.08,0,4,12,0,0,0,0,0,3,0
+66,duration_saq_0shot_nc.json,duration,False,False,Analogy Inference,5,263.48,0,7,10,2,0,0,0,0,1,0
+67,duration_saq_0shot_nc.json,duration,False,False,Commonsense,5,267.04,0,2,5,0,0,0,0,0,0,0
+68,duration_saq_0shot_nc.json,duration,False,False,Computation,5,201.88,0,0,1,0,2,0,0,0,2,0
+69,duration_saq_0shot_nc.json,duration,False,False,Direct Comparison,5,287.52,0,3,16,0,0,0,0,0,1,0
+70,duration_saq_0shot_nc.json,duration,False,False,Facts,5,280.44,0,0,11,0,2,0,0,0,1,0
+71,duration_saq_0shot_nc.json,duration,False,False,Multi-Step Comparison,5,193.96,0,7,14,0,0,0,0,0,2,0
+72,duration_saq_0shot_nc.json,duration,False,False,Reading Comprehension,5,276.24,0,2,7,0,0,0,1,0,0,0
+73,typical_time_saq_0shot_nc.json,typical,False,False,Commonsense,5,244.28,0,0,6,0,2,0,0,0,1,0
+74,typical_time_saq_0shot_nc.json,typical,False,False,Comparison,5,314.56,0,5,17,0,2,0,0,0,0,0
+75,typical_time_saq_0shot_nc.json,typical,False,False,Facts,5,209.56,0,0,10,0,0,0,0,0,0,0
+76,typical_time_saq_0shot_nc.json,typical,False,False,Reading Comprehension,5,261.96,0,1,7,0,1,0,0,0,0,0
+77,relation_mcq_0shot_nc.json,relation,True,False,TempEval-3,5,321.68,0,3,5,1,4,0,0,1,0,0
+78,storytelling_mcq_5shot_nc.json,storytelling,True,True,ROC,5,195.16,0,0,1,0,0,0,0,0,0,0
+79,storytelling_mcq_5shot_nc.json,storytelling,True,True,SCT,5,151.48,2,0,0,0,0,0,0,0,0,0
+80,ordering_mcq_5shot_nc.json,ordering,True,True,Commonsense,5,288.8,0,1,2,4,0,0,0,1,2,0
+81,ordering_mcq_5shot_nc.json,ordering,True,True,Facts,5,252.96,0,0,3,3,0,0,1,0,1,1
+82,duration_mcq_0shot_nc.json,duration,True,False,Analogy Inference,5,291.8,0,11,12,0,1,0,0,0,0,0
+83,duration_mcq_0shot_nc.json,duration,True,False,Commonsense,5,327.8,0,0,2,2,7,0,2,3,2,0
+84,duration_mcq_0shot_nc.json,duration,True,False,Computation,5,264.44,0,1,6,0,3,0,0,0,0,1
+85,duration_mcq_0shot_nc.json,duration,True,False,Direct Comparison,5,262.0,0,3,4,0,3,0,0,0,1,0
+86,duration_mcq_0shot_nc.json,duration,True,False,Facts,5,262.96,0,2,2,0,7,0,0,0,0,0
+87,duration_mcq_0shot_nc.json,duration,True,False,Multi-Step Comparison,5,329.72,0,9,13,2,2,0,0,0,2,0
+88,duration_mcq_0shot_nc.json,duration,True,False,Reading Comprehension,5,277.68,0,4,9,2,2,0,1,0,1,0
+89,typical_time_mcq_5shot_nc.json,typical,True,True,Commonsense,5,173.24,1,0,3,0,0,0,0,1,3,0
+90,typical_time_mcq_5shot_nc.json,typical,True,True,Comparison,5,251.92,0,0,1,4,1,0,1,0,1,0
+91,typical_time_mcq_5shot_nc.json,typical,True,True,Facts,5,309.08,0,3,7,5,0,0,2,1,1,0
+92,arithmetic_mcq_5shot_nc.json,arithmetic,True,True,Application,5,243.08,0,3,10,3,0,0,0,0,3,1
+93,arithmetic_mcq_5shot_nc.json,arithmetic,True,True,Date Computation,5,221.72,0,1,6,1,2,0,0,0,2,0
+94,arithmetic_mcq_5shot_nc.json,arithmetic,True,True,Hour Adjustment (12h),5,209.2,0,1,3,2,1,0,1,0,4,2
+95,arithmetic_mcq_5shot_nc.json,arithmetic,True,True,Hour Adjustment (24h),5,163.84,0,1,7,0,1,0,0,0,4,2
+96,arithmetic_mcq_5shot_nc.json,arithmetic,True,True,Month Shift,5,218.2,0,1,2,3,0,0,1,0,9,5
+97,arithmetic_mcq_5shot_nc.json,arithmetic,True,True,Time Computation,5,173.28,0,1,7,1,0,0,0,0,1,1
+98,arithmetic_mcq_5shot_nc.json,arithmetic,True,True,Time Zone Conversion,5,217.84,0,3,4,2,0,0,0,0,4,1
+99,arithmetic_mcq_5shot_nc.json,arithmetic,True,True,Week Identification,5,240.28,0,2,4,6,0,0,0,0,7,3
+100,arithmetic_mcq_5shot_nc.json,arithmetic,True,True,Year Shift,5,257.28,0,4,5,3,2,0,1,0,4,0
+101,ordering_mcq_0shot_nc.json,ordering,True,False,Commonsense,5,336.88,0,7,7,0,4,0,0,0,0,0
+102,ordering_mcq_0shot_nc.json,ordering,True,False,Facts,5,271.48,0,0,6,0,0,0,0,0,3,0
+103,duration_saq_5shot_nc.json,duration,False,True,Analogy Inference,5,220.0,0,0,1,1,1,0,0,0,2,1
+104,duration_saq_5shot_nc.json,duration,False,True,Commonsense,5,231.72,0,1,5,2,0,0,0,0,8,1
+105,duration_saq_5shot_nc.json,duration,False,True,Computation,5,141.8,0,0,5,2,0,0,0,0,5,0
+106,duration_saq_5shot_nc.json,duration,False,True,Direct Comparison,5,217.36,0,1,5,1,0,0,1,0,2,0
+107,duration_saq_5shot_nc.json,duration,False,True,Facts,5,227.12,0,2,10,0,0,0,0,0,7,0
+108,duration_saq_5shot_nc.json,duration,False,True,Multi-Step Comparison,5,141.16,0,0,1,2,0,0,0,0,3,1
+109,relation_mcq_5shot_nc.json,relation,True,True,TempEval-3,5,109.0,1,0,0,0,0,0,0,0,3,0
+110,relation_saq_5shot_nc.json,relation,False,True,TempEval-3,5,252.6,0,1,2,0,0,0,0,0,4,0
+111,relation_saq_0shot_nc.json,relation,False,False,TempEval-3,5,284.96,0,6,12,1,1,0,0,0,1,0
+112,frequency_saq_0shot_nc.json,frequency,False,False,Application,5,296.28,0,3,14,0,0,0,0,0,1,0
+113,frequency_saq_0shot_nc.json,frequency,False,False,Commonsense,5,300.8,0,0,9,0,0,0,0,0,1,0
+114,frequency_saq_0shot_nc.json,frequency,False,False,Comparison,5,345.24,0,2,15,0,0,0,0,0,1,0
+115,frequency_saq_0shot_nc.json,frequency,False,False,Computation,5,217.8,0,1,5,0,0,0,0,0,0,0
+116,frequency_saq_0shot_nc.json,frequency,False,False,Facts,5,265.2,0,5,11,0,0,0,0,0,1,0
+117,frequency_saq_0shot_nc.json,frequency,False,False,Reading Comprehension,5,210.0,0,1,7,0,1,0,0,0,0,0
+118,arithmetic_mcq_0shot_nc.json,arithmetic,True,False,Application,5,276.68,0,2,7,0,4,0,3,0,1,1
+119,arithmetic_mcq_0shot_nc.json,arithmetic,True,False,Date Computation,5,237.44,0,1,10,0,5,0,0,0,0,0
+120,arithmetic_mcq_0shot_nc.json,arithmetic,True,False,Hour Adjustment (12h),5,191.56,0,2,7,0,3,0,0,0,0,0
+121,arithmetic_mcq_0shot_nc.json,arithmetic,True,False,Hour Adjustment (24h),5,191.4,0,1,1,0,6,0,0,0,2,0
+122,arithmetic_mcq_0shot_nc.json,arithmetic,True,False,Month Shift,5,267.48,0,1,3,1,3,0,0,0,0,0
+123,arithmetic_mcq_0shot_nc.json,arithmetic,True,False,Time Computation,5,214.64,0,1,9,0,5,1,0,0,0,0
+124,arithmetic_mcq_0shot_nc.json,arithmetic,True,False,Time Zone Conversion,5,248.8,0,1,7,1,3,0,0,0,2,0
+125,arithmetic_mcq_0shot_nc.json,arithmetic,True,False,Week Identification,5,251.28,0,2,8,0,4,0,0,0,1,0
+126,arithmetic_mcq_0shot_nc.json,arithmetic,True,False,Year Shift,5,251.92,0,4,10,1,3,0,2,0,0,0
+127,nli_saq_0shot_nc.json,nli,False,False,MNLI,5,332.64,0,0,0,1,0,0,0,0,3,0
+128,nli_saq_0shot_nc.json,nli,False,False,SNLI,5,343.64,0,2,2,4,0,0,0,1,2,0
+129,ordering_saq_0shot_nc.json,ordering,False,False,Commonsense,5,317.4,0,0,8,0,0,0,0,1,0,0
+130,ordering_saq_0shot_nc.json,ordering,False,False,Facts,5,258.92,0,0,7,0,1,0,0,0,0,0
+131,nli_saq_5shot_nc.json,nli,False,True,MNLI,5,352.64,0,0,1,4,2,0,0,2,4,1
+132,nli_saq_5shot_nc.json,nli,False,True,SNLI,5,385.76,0,1,2,9,2,0,2,6,2,0
+133,causality_mcq_5shot_nc.json,causality,True,True,Cause,5,224.4,0,0,0,1,0,0,0,0,1,0
+134,causality_mcq_5shot_nc.json,causality,True,True,Effect,5,272.92,0,0,2,0,0,0,0,0,0,0
+135,nli_mcq_0shot_nc.json,nli,True,False,MNLI,5,304.0,0,1,6,2,0,0,0,1,2,0
+136,nli_mcq_0shot_nc.json,nli,True,False,SNLI,5,271.56,0,5,7,1,1,0,1,0,0,0
