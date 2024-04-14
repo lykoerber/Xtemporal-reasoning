@@ -26,7 +26,7 @@ In case you are encountering access/login issues with Huggingface, you might hav
 
 ## Usage
 
-To reproduce the experiments, run `python src/run.py` or `sbatch run.sh` on a GPU (insert your email addres [here](https://github.com/LydiaKoerber/Xtemporal-reasoning/blob/main/run.sh#L5)).
+To reproduce the experiments, run `python src/run.py` or `sbatch run.sh` on a GPU (insert your email address [here](https://github.com/LydiaKoerber/Xtemporal-reasoning/blob/main/run.sh#L5)).
 To reproduce the analyses in [analysis.ipynb](https://github.com/LydiaKoerber/Xtemporal-reasoning/blob/main/analysis.ipynb), run the following to unzip the output file:
 
 ```
